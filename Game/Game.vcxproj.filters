@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Database Management">
+      <UniqueIdentifier>{dd2dcd70-5c64-425c-92b7-10c89c49220e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{e4437d58-0274-4d95-8d48-395a0b8cc8ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools">
+      <UniqueIdentifier>{e79f7de7-e880-4020-91c7-4bba10d0fee7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mysql_utils.cpp">
+      <Filter>Source Files\Database Management</Filter>
+    </ClCompile>
+    <ClCompile Include="src\database_manager.cpp">
+      <Filter>Source Files\Database Management</Filter>
+    </ClCompile>
+    <ClCompile Include="src\user.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\misc_utils.cpp">
+      <Filter>Source Files\Tools</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\mysql_utils.h">
+      <Filter>Source Files\Database Management</Filter>
+    </ClInclude>
+    <ClInclude Include="src\database_manager.h">
+      <Filter>Source Files\Database Management</Filter>
+    </ClInclude>
+    <ClInclude Include="src\user.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\misc_utils.h">
+      <Filter>Source Files\Tools</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
