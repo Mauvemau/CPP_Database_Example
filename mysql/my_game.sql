@@ -7,7 +7,7 @@ USE my_game;
 CREATE TABLE IF NOT EXISTS users(
 	id_user INT AUTO_INCREMENT NOT NULL,
     user_name VARCHAR(25) NOT NULL,
-    user_password_hash VARCHAR(20) NOT NULL, -- When creating a hash using <functional> a string of 20 maximum characters is produced on a 64 bits application.
+    user_password_hash VARCHAR(20) NOT NULL, -- When creating a hash using <functional> a string of 21 maximum characters is produced on a 64 bits application.
     PRIMARY KEY(id_user)
 );
 

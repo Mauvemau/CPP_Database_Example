@@ -9,6 +9,20 @@ using namespace std;
 /// </summary>
 class MiscUtils {
 public:
+	static string toLowerCase(string input);
+	/// <summary>
+	/// Returns wether the character string has a space or not.
+	/// </summary>
+	static bool containsSpace(const char input[]);
+	/// <summary>
+	/// Makes sure that the input string of characters is valid, also eliminating input buffer issues.
+	/// </summary>
+	static void validateCharInput(char input[], size_t size);
+	/// <summary>
+	/// Makes sure that the provided input is of the specified type.
+	/// </summary>
+	template <typename T>
+	static T validateInput();
 	/// <summary>
 	/// Hashes a string using <functional>
 	/// </summary>

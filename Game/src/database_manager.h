@@ -22,6 +22,11 @@ public:
 	~DatabaseManager();
 
 	/// <summary>
+	/// Returns if the password is correct or not.
+	/// </summary>
+	bool validatePassword(int id, string password);
+
+	/// <summary>
 	/// Returns a specified user.
 	/// </summary>
 	User getUser(int id);

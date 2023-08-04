@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include "mysql_utils.h"
+#include "misc_utils.h"
 
 using namespace std;
 
@@ -69,19 +70,49 @@ User DatabaseManager::getUserByQuery(const string& query) {
 
 // Public
 
+bool DatabaseManager::validatePassword(int id, string password) {
+	string query = "SELECT user_password_hash FROM users WHERE id_user = " + to_string(id);
+	string actualPassword = "null";
+
+	try {
+		MYSQL_RES* result = MySQLUtils::executeQuery(mysql, query.c_str());
+
+		if (result) {
+			MYSQL_ROW row = mysql_fetch_row(result);
+
+			if (row) {
+				actualPassword = row[0];
+				mysql_free_result(result);
+			}
+			else {
+				mysql_free_result(result);
+				throw runtime_error("User not found.");
+			}
+		}
+		else {
+			throw runtime_error("User not found.");
+		}
+	}
+	catch (const runtime_error& e) {
+		cerr << "Error: " << e.what() << "\n";
+	}
+
+	return (password == actualPassword);
+}
+
 User DatabaseManager::getUser(int id) {
 	string query = "SELECT * FROM users WHERE id_user = " + to_string(id);
 	return getUserByQuery(query);
 }
 
 User DatabaseManager::getUser(string name) {
-	string escapedName = MySQLUtils::escapeString(mysql, name);
+	string escapedName = MySQLUtils::escapeString(mysql, MiscUtils::toLowerCase(name));
 	string query = "SELECT * FROM users WHERE user_name = '" + escapedName + "'";
 	return getUserByQuery(query);
 }
 
 void DatabaseManager::setUserName(int id, string newName) {
-	string escapedName = MySQLUtils::escapeString(mysql, newName);
+	string escapedName = MySQLUtils::escapeString(mysql, MiscUtils::toLowerCase(newName));
 	string query = "UPDATE users SET user_name = '" + escapedName + "' WHERE id_user = " + to_string(id);
 	try {
 		MySQLUtils::executeQuery(mysql, query.c_str());
@@ -103,7 +134,7 @@ void DatabaseManager::setUserPassword(int id, string newPassword) {
 }
 
 void DatabaseManager::createUser(string name, string password) {
-	string escapedName = MySQLUtils::escapeString(mysql, name);
+	string escapedName = MySQLUtils::escapeString(mysql, MiscUtils::toLowerCase(name));
 	string escapedPass = MySQLUtils::escapeString(mysql, password);
 	string query = "INSERT INTO users(user_name, user_password_hash) VALUES('" + escapedName + "', '" + escapedPass + "')";
 	try {
