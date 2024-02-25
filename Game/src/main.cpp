@@ -31,6 +31,7 @@ int main() {
 
     databaseManager.createUser(username, password);
     */
+
     cout << "Insert the username you want to log in as.\n> ";
     username = MiscUtils::usernameInput();
 
