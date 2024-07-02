@@ -5,16 +5,22 @@
 
 using namespace std;
 
+void myPause(){
+    do {
+        cout << "Press the Enter key to continue.\n";
+    } while (cin.get() != '\n');
+}
+
 int main() {
     DatabaseManager databaseManager("localhost", "root", "1234", "my_game", 3306);
     cout << "\n";
 
-    system("pause");
+    //system("pause");
+    myPause();
     cout << "\n";
     string username;
     string password;
 
-    /*
     cout << "Insert the username you want to create.\n> ";
     username = MiscUtils::usernameInput();
 
@@ -30,8 +36,9 @@ int main() {
     cout << "Inserting new user into the database...\n";
 
     databaseManager.createUser(username, password);
-    */
 
+
+    /*
     cout << "Insert the username you want to log in as.\n> ";
     username = MiscUtils::usernameInput();
 
@@ -53,8 +60,10 @@ int main() {
     else {
         cout << "Couldn't retrieve user";
     }
+    */
 
     cout << "\n";
-    system("pause");
+    //system("pause");
+    myPause();
     return 0;
 }

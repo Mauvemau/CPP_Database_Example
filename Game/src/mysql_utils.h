@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "mysql.h"
+#include "mysql/mysql.h"
 
 using namespace std;
 
