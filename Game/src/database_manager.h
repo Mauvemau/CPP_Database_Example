@@ -1,6 +1,10 @@
 #pragma once
 
+#ifdef _WIN32
+#include "mysql.h"
+#else // Library directory on linux is different
 #include "mysql/mysql.h"
+#endif
 
 #include "user.h"
 

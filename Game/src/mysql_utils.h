@@ -1,7 +1,11 @@
 #pragma once
 
 #include <iostream>
+#ifdef _WIN32
+#include "mysql.h"
+#else // Library directory on linux is different
 #include "mysql/mysql.h"
+#endif
 
 using namespace std;
 
