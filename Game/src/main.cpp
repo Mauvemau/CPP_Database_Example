@@ -2,8 +2,11 @@
 
 #include "database_manager.h"
 #include "misc_utils.h"
+#include "menu_manager.h"
 
 using namespace std;
+
+// TEMP
 
 void myPause(){
     do {
@@ -11,11 +14,10 @@ void myPause(){
     } while (cin.get() != '\n');
 }
 
-int main() {
+void usageExample(){
     DatabaseManager databaseManager("localhost", "root", "1234", "my_game", 3306);
     cout << "\n";
 
-    //system("pause");
     myPause();
     cout << "\n";
     string username;
@@ -37,8 +39,6 @@ int main() {
 
     databaseManager.createUser(username, password);
 
-
-    /*
     cout << "Insert the username you want to log in as.\n> ";
     username = MiscUtils::usernameInput();
 
@@ -60,10 +60,16 @@ int main() {
     else {
         cout << "Couldn't retrieve user";
     }
-    */
+}
+
+//
+
+int main() {
+
+    MenuManager mm;
+    mm.start();
 
     cout << "\n";
-    //system("pause");
     myPause();
     return 0;
 }
