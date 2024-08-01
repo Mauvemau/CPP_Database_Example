@@ -19,12 +19,22 @@ private:
 	/// Returns a single user using a query.
 	/// </summary>
 	User getUserByQuery(const string& query);
-
 public:
 
 	DatabaseManager(const char* host, const char* user, const char* password, const char* database, int port);
 	~DatabaseManager();
 
+	/// <summary>
+	/// Returns whether or not a connection has been established.
+	/// </summary>
+	/// <returns></returns>
+	bool isConnected();
+
+	/// <summary>
+	/// Returns if the User exists in the database.
+	/// </summary>
+	/// <returns></returns>
+	bool validateUser(string name);
 	/// <summary>
 	/// Returns if the password is correct or not.
 	/// </summary>

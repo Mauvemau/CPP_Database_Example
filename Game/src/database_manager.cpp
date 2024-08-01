@@ -70,6 +70,36 @@ User DatabaseManager::getUserByQuery(const string& query) {
 
 // Public
 
+bool DatabaseManager::isConnected() {
+	return mysql != nullptr;
+}
+
+bool DatabaseManager::validateUser(string name) {
+	try {
+		string escapedName = MySQLUtils::escapeString(mysql, MiscUtils::toLowerCase(name));
+		string query = "SELECT COUNT(*) FROM users WHERE user_name = '" + escapedName + "'";
+
+		MYSQL_RES* result = MySQLUtils::executeQuery(mysql, query.c_str());
+
+		if (result) {
+			MYSQL_ROW row = mysql_fetch_row(result);
+
+			if (row && row[0]) {
+				int count = atoi(row[0]);
+				mysql_free_result(result);
+
+				return count > 0;
+			}
+			mysql_free_result(result);
+		}
+	}
+	catch (const runtime_error& e) {
+		cerr << "Error: " << e.what() << "\n";
+	}
+
+	return false;
+}
+
 bool DatabaseManager::validatePassword(int id, string password) {
 	string query = "SELECT user_password_hash FROM users WHERE id_user = " + to_string(id);
 	string actualPassword = "null";

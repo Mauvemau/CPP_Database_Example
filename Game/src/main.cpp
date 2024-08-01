@@ -1,23 +1,18 @@
 #include <iostream>
 
-#include "database_manager.h"
-#include "misc_utils.h"
-#include "menu_manager.h"
+#include "menu.h"
 
 using namespace std;
 
-// TEMP
+int main() {
+    Menu menu;
+    menu.run();
 
-void myPause(){
-    do {
-        cout << "Press the Enter key to continue.\n";
-    } while (cin.get() != '\n');
-}
-
-void usageExample(){
+    /*
     DatabaseManager databaseManager("localhost", "root", "1234", "my_game", 3306);
     cout << "\n";
 
+    //system("pause");
     myPause();
     cout << "\n";
     string username;
@@ -38,7 +33,9 @@ void usageExample(){
     cout << "Inserting new user into the database...\n";
 
     databaseManager.createUser(username, password);
+    */
 
+    /*
     cout << "Insert the username you want to log in as.\n> ";
     username = MiscUtils::usernameInput();
 
@@ -60,16 +57,7 @@ void usageExample(){
     else {
         cout << "Couldn't retrieve user";
     }
-}
+    */
 
-//
-
-int main() {
-
-    MenuManager mm;
-    mm.start();
-
-    cout << "\n";
-    myPause();
     return 0;
 }
