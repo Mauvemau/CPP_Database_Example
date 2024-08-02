@@ -113,7 +113,6 @@ string MiscUtils::getRandomAnimalName() {
 }
 
 int MiscUtils::getRandomInt(int min, int max) {
-	srand(static_cast<unsigned>(time(0)));
 	if (min > max) {
 		int aux = max;
 		max = min;

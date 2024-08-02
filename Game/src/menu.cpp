@@ -27,13 +27,14 @@ void Menu::petCapture() {
 			maxHP = static_cast<float>(MiscUtils::getRandomInt(8, 384));
 			attack = static_cast<float>(MiscUtils::getRandomInt(6, 154));
 			type = static_cast<PetType>(MiscUtils::getRandomInt(1, 3));
-			catchChance = MiscUtils::getRandomInt(50, 100);
+			catchChance = MiscUtils::getRandomInt(35, 100);
 			passed = false;
 		}
 		
 		int input;
 		cout << "[A WILD CREATURE HAS APPEARED]\n\n";
-		cout << "[" << name << "] Type: " << MiscUtils::getPetTypeString(type) << "\n\n";
+		cout << "[" << name << "] Type: " << MiscUtils::getPetTypeString(type) << "\n";
+		cout << catchChance << "% catch chance!\n\n";
 		cout << "Use the numbers on your keyboard to pick an option!\n\n";
 		cout << "1. Try collect!\n2. Pass\n3. Return to Character Menu\n";
 
@@ -85,7 +86,6 @@ void Menu::petDelete() {
 			cout << "[REMOVING PET]\nEnter the index of the Pet you want to remove from your collection. (or press ESC key to return)\n\n";
 			int i = 0;
 
-			cout << "\n";
 			cout << "Selection > ";
 			input = MiscUtils::safeInputNumbers(true, false);
 			if (input == MAGIC_STRING) return;
@@ -417,6 +417,7 @@ void Menu::mainMenu() {
 void Menu::run() {
 	SessionManager::connectToDatabase("dbConfig.txt");
 	MiscUtils::waitUserInput();
+	srand(static_cast<unsigned>(time(0)));
 	do {
 		this->mainMenu();
 	} while (!exit);
