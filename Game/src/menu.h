@@ -6,14 +6,21 @@
 class Menu {
 private:
 	bool exit;
+
+	void launchGame();
+
+	void characterSelect();
+	void createCharacter();
+
+	void userMenu();
+
+	void createAccount();
+	void login();
+
+	void mainMenu();
 public:
 	Menu();
 	~Menu();
-
-	void launchGame();
-	void createAccount();
-	void login();
-	void main();
 
 	void run();
 };

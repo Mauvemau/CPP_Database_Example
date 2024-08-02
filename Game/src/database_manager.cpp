@@ -174,3 +174,61 @@ void DatabaseManager::createUser(string name, string password) {
 		cerr << "Error: " << e.what() << "\n";
 	}
 }
+
+vector<Character> DatabaseManager::getUserCharacters(int userId) {
+	vector<Character> characters;
+	string query = "SELECT c.id_character, c.character_name FROM characters c "
+				   "INNER JOIN users_characters uc ON c.id_character = uc.id_character "
+				   "WHERE uc.id_user = " + to_string(userId);
+	try {
+		MYSQL_RES* result = MySQLUtils::executeQuery(mysql, query.c_str());
+		if (result) {
+			MYSQL_ROW row;
+			while ((row = mysql_fetch_row(result))) {
+				int id_character = atoi(row[0]);
+				string character_name = row[1];
+				characters.emplace_back(id_character, character_name);
+			}
+			mysql_free_result(result);
+		}
+	}
+	catch (const runtime_error& e) {
+		cerr << "Error: " << e.what() << "\n";
+	}
+	return characters;
+}
+
+void DatabaseManager::createCharacter(int userID, string characterName) {
+	string escapedName = MySQLUtils::escapeString(mysql, MiscUtils::toLowerCase(characterName));
+	// We first create a character and insert it into the characters table.
+	string query = "INSERT INTO characters(character_name) VALUES('" + escapedName + "')";
+
+	try {
+		MySQLUtils::executeQuery(mysql, query.c_str());
+
+		string getLastInsertIdQuery = "SELECT LAST_INSERT_ID()";
+		MYSQL_RES* result = MySQLUtils::executeQuery(mysql, getLastInsertIdQuery.c_str());
+
+		if (result) {
+			MYSQL_ROW row = mysql_fetch_row(result);
+			if (row) {
+				int characterID = atoi(row[0]);
+				mysql_free_result(result);
+
+				// We then want to associate the character with the userID provided, therefore we retrieve the character ID and insert both ids into the joint table.
+				string userCharQuery = "INSERT INTO users_characters(id_user, id_character) VALUES(" + to_string(userID) + ", " + to_string(characterID) + ")";
+				MySQLUtils::executeQuery(mysql, userCharQuery.c_str());
+			}
+			else {
+				mysql_free_result(result);
+				throw runtime_error("Failed to retrieve character ID.");
+			}
+		}
+		else {
+			throw runtime_error("Failed to retrieve character ID.");
+		}
+	}
+	catch (const runtime_error& e) {
+		cerr << "Error: " << e.what() << "\n";
+	}
+}

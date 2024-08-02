@@ -8,6 +8,8 @@
 
 #include "user.h"
 
+#include <vector>
+
 /// <summary>
 /// Class used to handle a database.
 /// </summary>
@@ -29,6 +31,8 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool isConnected();
+
+	// ---- User Related
 
 	/// <summary>
 	/// Returns if the User exists in the database.
@@ -53,4 +57,10 @@ public:
 	/// Inserts a new user into the database.
 	/// </summary>
 	void createUser(string name, string password);
+
+	// ---- Character Related
+
+	vector<Character> getUserCharacters(int userId);
+
+	void createCharacter(int userID, string characterName);
 };

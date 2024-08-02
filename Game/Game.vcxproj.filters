@@ -34,7 +34,13 @@
     <ClCompile Include="src\menu.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
     <ClCompile Include="src\session_manager.cpp">
+      <Filter>Source Files\Database Management</Filter>
+    </ClCompile>
+    <ClCompile Include="src\character.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,7 +60,13 @@
     <ClInclude Include="src\menu.h">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="src\game.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
     <ClInclude Include="src\session_manager.h">
+      <Filter>Source Files\Database Management</Filter>
+    </ClInclude>
+    <ClInclude Include="src\character.h">
       <Filter>Source Files\Game</Filter>
     </ClInclude>
   </ItemGroup>

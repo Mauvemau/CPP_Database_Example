@@ -16,3 +16,15 @@ int User::getID() {
 string User::getName() {
 	return name;
 }
+
+vector<Character> User::getCharacters() {
+	return characters;
+}
+
+void User::addCharacter(Character character) {
+	characters.push_back(character);
+}
+
+void User::setCharacters(vector<Character> characters) {
+	this->characters = characters;
+}

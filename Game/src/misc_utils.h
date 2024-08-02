@@ -74,6 +74,17 @@ public:
 	static string SafeInput(bool allowAbort);
 	static string SafeInput(bool allowAbort, bool allowSpacing, bool allowSpecialChars, bool censorInput);
 	static string SafeInput(bool allowAbort, bool allowSpacing, bool allowSpecialChars, bool censorInput, int charLimit);
+
+	/// <summary>
+	/// 
+	/// </summary>
+	static string safeInputLetters(bool allowAbort, bool censorInput);
+	static string safeInputLetters(bool allowAbort, bool censorInput, int charLimit);
+	/// <summary>
+	/// 
+	/// </summary>
+	static string safeInputNumbers(bool allowAbort, bool censorInput);
+	static string safeInputNumbers(bool allowAbort, bool censorInput, int charLimit);
 	/// <summary>
 	/// Receives a string and returns the same string but in lowerCase.
 	/// </summary>

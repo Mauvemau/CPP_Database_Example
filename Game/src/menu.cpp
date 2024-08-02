@@ -1,5 +1,7 @@
 #include "menu.h"
 
+#include <string>
+
 Menu::Menu() {
 	exit = false;
 }
@@ -9,7 +11,111 @@ Menu::~Menu() {
 }
 
 void Menu::launchGame() {
+	
+}
 
+void Menu::characterSelect() {
+	if (!SessionManager::isLoggedIn()) return;
+	SessionManager::loadUserCharacters();
+	User currentUser = SessionManager::getCurrentUser();
+	vector<Character> userCharacters = currentUser.getCharacters();
+	if (!userCharacters.empty()) {
+		string input;
+		bool validInput = false;
+		do {
+			MiscUtils::clearScreen();
+			cout << "[CHARACTER SELECT]\nEnter the number next to the character you wish to select! (or press ESC key to return)\n\n";
+			int i = 0;
+			for (vector<Character>::iterator it = userCharacters.begin(); it != userCharacters.end(); ++it) {
+				cout << i + 1 << ". " << it->getName() << "\n";
+				i++;
+			}
+
+			cout << "\n";
+			cout << "Selection > ";
+			input = MiscUtils::safeInputNumbers(true, false);
+			if (input == MAGIC_STRING) return;
+			if (!input.empty()) {
+				int num = stoi(input);
+
+				num--;
+				if (num > -1 && num < userCharacters.size()) {
+					cout << "\n";
+					SessionManager::selectCharacter(userCharacters[num].getID());
+					validInput = true;
+				}
+			}
+		} while (!validInput);
+		MiscUtils::waitUserInput();
+	}
+	else {
+		MiscUtils::clearScreen();
+		cout << "You haven't created any characters yet!\nUse the second option in the user menu to create a new character!\n";
+		MiscUtils::waitUserInput();
+	}
+}
+
+void Menu::createCharacter() {
+	if (SessionManager::isConnectedToDatabase()) {
+		string characterName;
+		bool validName = false;
+		do {
+			MiscUtils::clearScreen();
+			cout << "[CREATING A CHARACTER]\n\n";
+			cout << "Please input the name you would like your character to have. (20 character limit)\n";
+			cout << "\n";
+			cout << "Character Name > ";
+			characterName = MiscUtils::SafeInput(true, true, false, false, 20);
+			if (characterName == MAGIC_STRING) return;
+			if (characterName.size() > 0) {
+				validName = true;
+			}
+		} while (!validName);
+
+		SessionManager::createCharacter(characterName);
+		cout << "\n";
+		cout << "User \"" << characterName << "\" has been created created!!\n";
+		MiscUtils::waitUserInput();
+	}
+	else {
+		MiscUtils::clearScreen();
+		cout << "\n";
+		cout << "The client is not currently connected to any database!!!\n";
+		MiscUtils::waitUserInput();
+	}
+}
+
+void Menu::userMenu() {
+	if (!SessionManager::isLoggedIn()) return;
+	User currentUser = SessionManager::getCurrentUser();
+	bool returnToMainMenu = false;
+	do {
+		MiscUtils::clearScreen();
+		int input;
+		cout << "[USER: " << currentUser.getID() << ":" << currentUser.getName() << "]\nUse the numbers on your keyboard to pick an option!\n\n";
+		cout << "1. Select a character\n2. Create a character\n3. Logout\n";
+
+		do {
+			cout << "\n";
+			cout << "Input > ";
+			input = MiscUtils::getKey(true);
+		} while (input < 49 || input > 51);
+
+		switch (static_cast<char>(input)) {
+		case '1':
+			characterSelect();
+			break;
+		case '2':
+			createCharacter();
+			break;
+		case '3':
+			returnToMainMenu = true;
+			break;
+		default:
+			break;
+		}
+		cout << "\n";
+	} while (!returnToMainMenu);
 }
 
 void Menu::createAccount() {
@@ -56,14 +162,14 @@ void Menu::createAccount() {
 			}
 		} while (!validPassword);
 		SessionManager::createUser(userName, password);
-		cout << "User \"" << userName << "\" has been created created!!\n";
 		cout << "\n";
+		cout << "User \"" << userName << "\" has been created created!!\n";
 		MiscUtils::waitUserInput();
 	}
 	else {
 		MiscUtils::clearScreen();
-		cout << "The client is not currently connected to any database!!!\n";
 		cout << "\n";
+		cout << "The client is not currently connected to any database!!!\n";
 		MiscUtils::waitUserInput();
 	}
 }
@@ -111,6 +217,10 @@ void Menu::login() {
 		cout << "\n";
 		SessionManager::logIn(userName, password);
 		MiscUtils::waitUserInput();
+
+		// We jump to user menu
+
+		userMenu();
 	}
 	else {
 		MiscUtils::clearScreen();
@@ -119,7 +229,7 @@ void Menu::login() {
 	}
 }
 
-void Menu::main() {
+void Menu::mainMenu() {
 	MiscUtils::clearScreen();
 	int input;
 	cout << "Welcome!\nUse the numbers on your keyboard to pick an option!\n\n";
@@ -151,7 +261,7 @@ void Menu::run() {
 	SessionManager::connectToDatabase("dbConfig.txt");
 	MiscUtils::waitUserInput();
 	do {
-		this->main();
+		this->mainMenu();
 	} while (!exit);
 	MiscUtils::clearScreen();
 	cout << "\n";

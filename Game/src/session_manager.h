@@ -6,6 +6,7 @@ class SessionManager {
 private:
 	static DatabaseManager* dbm;
 	static User currentUser;
+	static Character currentCharacter;
 	static bool loggedIn;
 public:
 	static void connectToDatabase(string path);
@@ -14,11 +15,20 @@ public:
 	static bool isConnectedToDatabase();
 	static bool isLoggedIn();
 
+	static User getCurrentUser();
+
 	static bool verifyUser(string userName);
 	static bool verifyPassword(string username, string password);
 
 	static void logIn(string userName, string password);
 	static void logOut();
 
+	static void selectCharacter(int charID);
+	static void unSelectCharacter();
+
 	static void createUser(string userName, string password);
+
+	static void loadUserCharacters();
+	
+	static void createCharacter(string name);
 };

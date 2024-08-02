@@ -241,6 +241,172 @@ string MiscUtils::SafeInput(bool allowAbort, bool allowSpacing, bool allowSpecia
 	return returnString;
 }
 
+string MiscUtils::safeInputLetters(bool allowAbort, bool censorInput) {
+	string returnString = "";
+	char input;
+	do {
+		input = getKey(true);
+
+		switch (input) {
+		case KEY_ESC:
+			if (allowAbort) {
+				returnString = MAGIC_STRING;
+				cout << "\n";
+			}
+			break;
+		case KEY_ENTER:
+			cout << "\n";
+			break;
+		case static_cast<char>(8):
+			if (returnString.size() > 0) {
+				cout << "\b \b";
+				returnString.pop_back();
+			}
+			break;
+		case ' ':
+			break;
+		default:
+			if (isalpha(input)) {
+				returnString.push_back(input);
+				if (censorInput) {
+					cout << "*";
+				}
+				else {
+					cout << input;
+				}
+			}
+			break;
+		}
+	} while (input != KEY_ESC && input != KEY_ENTER);
+	return returnString;
+}
+
+string MiscUtils::safeInputLetters(bool allowAbort, bool censorInput, int charLimit) {
+	string returnString = "";
+	char input;
+	int charCount = 0;
+	do {
+		input = getKey(true);
+
+		switch (input) {
+		case KEY_ESC:
+			if (allowAbort) {
+				returnString = MAGIC_STRING;
+				cout << "\n";
+			}
+			break;
+		case KEY_ENTER:
+			cout << "\n";
+			break;
+		case static_cast<char>(8):
+			if (returnString.size() > 0) {
+				cout << "\b \b";
+				returnString.pop_back();
+				charCount--;
+			}
+			break;
+		case ' ':
+			break;
+		default:
+			if (returnString.size() < charLimit && isalpha(input)) {
+				returnString.push_back(input);
+				if (censorInput) {
+					cout << "*";
+				}
+				else {
+					cout << input;
+				}
+				charCount++;
+			}
+			break;
+		}
+	} while (input != KEY_ESC && input != KEY_ENTER);
+	return returnString;
+}
+
+string MiscUtils::safeInputNumbers(bool allowAbort, bool censorInput) {
+	string returnString = "";
+	char input;
+	do {
+		input = getKey(true);
+
+		switch (input) {
+		case KEY_ESC:
+			if (allowAbort) {
+				returnString = MAGIC_STRING;
+				cout << "\n";
+			}
+			break;
+		case KEY_ENTER:
+			cout << "\n";
+			break;
+		case static_cast<char>(8):
+			if (returnString.size() > 0) {
+				cout << "\b \b";
+				returnString.pop_back();
+			}
+			break;
+		case ' ':
+			break;
+		default:
+			if (isdigit(input)) {
+				returnString.push_back(input);
+				if (censorInput) {
+					cout << "*";
+				}
+				else {
+					cout << input;
+				}
+			}
+			break;
+		}
+	} while (input != KEY_ESC && input != KEY_ENTER);
+	return returnString;
+}
+
+string MiscUtils::safeInputNumbers(bool allowAbort, bool censorInput, int charLimit) {
+	string returnString = "";
+	char input;
+	int charCount = 0;
+	do {
+		input = getKey(true);
+
+		switch (input) {
+		case KEY_ESC:
+			if (allowAbort) {
+				returnString = MAGIC_STRING;
+				cout << "\n";
+			}
+			break;
+		case KEY_ENTER:
+			cout << "\n";
+			break;
+		case static_cast<char>(8):
+			if (returnString.size() > 0) {
+				cout << "\b \b";
+				returnString.pop_back();
+				charCount--;
+			}
+			break;
+		case ' ':
+			break;
+		default:
+			if (returnString.size() < charLimit && isdigit(input)) {
+				returnString.push_back(input);
+				if (censorInput) {
+					cout << "*";
+				}
+				else {
+					cout << input;
+				}
+				charCount++;
+			}
+			break;
+		}
+	} while (input != KEY_ESC && input != KEY_ENTER);
+	return returnString;
+}
+
 string MiscUtils::toLowerCase(string input) {
 	string result = input;
 	for (char& c : result) {
