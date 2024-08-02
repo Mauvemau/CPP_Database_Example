@@ -60,7 +60,14 @@ public:
 
 	// ---- Character Related
 
-	vector<Character> getUserCharacters(int userId);
+	vector<Character> getUserCharacters(int userID);
 
 	void createCharacter(int userID, string characterName);
+
+	// ---- Pet Related
+
+	vector<Pet> getCharacterPets(int characterID);
+
+	void deletePet(int petID);
+	void createPet(int characterID, string petName, float maxHP, float atk, int typeID);
 };

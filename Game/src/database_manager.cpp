@@ -175,11 +175,11 @@ void DatabaseManager::createUser(string name, string password) {
 	}
 }
 
-vector<Character> DatabaseManager::getUserCharacters(int userId) {
+vector<Character> DatabaseManager::getUserCharacters(int userID) {
 	vector<Character> characters;
 	string query = "SELECT c.id_character, c.character_name FROM characters c "
 				   "INNER JOIN users_characters uc ON c.id_character = uc.id_character "
-				   "WHERE uc.id_user = " + to_string(userId);
+				   "WHERE uc.id_user = " + to_string(userID);
 	try {
 		MYSQL_RES* result = MySQLUtils::executeQuery(mysql, query.c_str());
 		if (result) {
@@ -226,6 +226,84 @@ void DatabaseManager::createCharacter(int userID, string characterName) {
 		}
 		else {
 			throw runtime_error("Failed to retrieve character ID.");
+		}
+	}
+	catch (const runtime_error& e) {
+		cerr << "Error: " << e.what() << "\n";
+	}
+}
+
+vector<Pet> DatabaseManager::getCharacterPets(int characterID) {
+	vector<Pet> pets;
+	string query = "SELECT p.id_pet, p.pet_name, p.pet_max_hp, p.pet_current_hp, p.pet_attack_damage, p.id_type "
+		"FROM pets p INNER JOIN characters_pets cp ON p.id_pet = cp.id_pet "
+		"WHERE cp.id_character = " + to_string(characterID);
+
+	try {
+		MYSQL_RES* result = MySQLUtils::executeQuery(mysql, query.c_str());
+		if (result) {
+			MYSQL_ROW row;
+			while ((row = mysql_fetch_row(result))) {
+				int id_pet = atoi(row[0]);
+				string pet_name = row[1];
+				float pet_max_hp = static_cast<float>(atof(row[2]));
+				float pet_current_hp = static_cast<float>(atof(row[3]));
+				float pet_attack_damage = static_cast<float>(atof(row[4]));
+				int id_type = atoi(row[5]);
+
+				PetType petType = static_cast<PetType>(id_type);
+				pets.emplace_back(id_pet, pet_name, pet_max_hp, pet_current_hp, pet_attack_damage, petType);
+			}
+			mysql_free_result(result);
+		}
+	}
+	catch (const runtime_error& e) {
+		cerr << "Error: " << e.what() << "\n";
+	}
+	return pets;
+}
+
+void DatabaseManager::deletePet(int petID) {
+	string charPetQuery = "DELETE FROM characters_pets WHERE id_pet = " + to_string(petID);
+
+	try {
+		MySQLUtils::executeQuery(mysql, charPetQuery.c_str());
+
+		string petQuery = "DELETE FROM pets WHERE id_pet = " + to_string(petID);
+		MySQLUtils::executeQuery(mysql, petQuery.c_str());
+	}
+	catch (const runtime_error& e) {
+		cerr << "Error: " << e.what() << "\n";
+	}
+}
+
+void DatabaseManager::createPet(int characterID, string petName, float maxHP, float atk, int typeID) {
+	string escapedName = MySQLUtils::escapeString(mysql, MiscUtils::toLowerCase(petName));
+	string query = "INSERT INTO pets(pet_name, pet_max_hp, pet_current_hp, pet_attack_damage, id_type) VALUES('"
+		+ escapedName + "', " + to_string(maxHP) + ", " + to_string(maxHP) + ", " + to_string(atk) + ", " + to_string(typeID) + ")";
+
+	try {
+		MySQLUtils::executeQuery(mysql, query.c_str());
+
+		string getLastInsertIdQuery = "SELECT LAST_INSERT_ID()";
+		MYSQL_RES* result = MySQLUtils::executeQuery(mysql, getLastInsertIdQuery.c_str());
+
+		if (result) {
+			MYSQL_ROW row = mysql_fetch_row(result);
+			if (row) {
+				int petID = atoi(row[0]);
+				mysql_free_result(result);
+
+				string charPetQuery = "INSERT INTO characters_pets(id_character, id_pet) VALUES(" + to_string(characterID) + ", " + to_string(petID) + ")";
+				MySQLUtils::executeQuery(mysql, charPetQuery.c_str());
+			}
+			else {
+				mysql_free_result(result);
+				throw runtime_error("Failed to retrieve pet ID.");
+			}
+		}
+		else {
+			throw runtime_error("Failed to retrieve pet ID.");
 		}
 	}
 	catch (const runtime_error& e) {

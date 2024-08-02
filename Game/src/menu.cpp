@@ -10,8 +10,164 @@ Menu::~Menu() {
 
 }
 
-void Menu::launchGame() {
-	
+void Menu::petCapture() {
+	if (!SessionManager::isCharacterSelected()) return;
+	bool returnToCharMenu = false;
+	bool passed = true;
+
+	string name;
+	float maxHP;
+	float attack;
+	PetType type;
+	int catchChance;
+	do {
+		MiscUtils::clearScreen();
+		if (passed) {
+			name = MiscUtils::getRandomAnimalName();
+			maxHP = static_cast<float>(MiscUtils::getRandomInt(8, 384));
+			attack = static_cast<float>(MiscUtils::getRandomInt(6, 154));
+			type = static_cast<PetType>(MiscUtils::getRandomInt(1, 3));
+			catchChance = MiscUtils::getRandomInt(50, 100);
+			passed = false;
+		}
+		
+		int input;
+		cout << "[A WILD CREATURE HAS APPEARED]\n\n";
+		cout << "[" << name << "] Type: " << MiscUtils::getPetTypeString(type) << "\n\n";
+		cout << "Use the numbers on your keyboard to pick an option!\n\n";
+		cout << "1. Try collect!\n2. Pass\n3. Return to Character Menu\n";
+
+		do {
+			cout << "\n";
+			cout << "Input > ";
+			input = MiscUtils::getKey(true);
+		} while (input < 49 || input > 51);
+
+		int catchRoll = MiscUtils::getRandomInt(1, 100);
+
+		switch (static_cast<char>(input)) {
+		case '1':
+			cout << "\n\n";
+			if (catchRoll <= catchChance) {
+				cout << "You successfully caught the pet!\n";
+				SessionManager::createPet(name, maxHP, attack, type);
+			}
+			else {
+				cout << "The pet has escaped!\n";
+			}
+			passed = true;
+			MiscUtils::waitUserInput();
+			break;
+		case '2':
+			passed = true;
+			break;
+		case '3':
+			returnToCharMenu = true;
+			break;
+		default:
+			break;
+		}
+		cout << "\n";
+	} while (!returnToCharMenu);
+}
+
+void Menu::petDelete() {
+	if (!SessionManager::isCharacterSelected()) return;
+	SessionManager::loadCharacterPets();
+	Character currentCharacter = SessionManager::getCurrentCharacter();
+	vector<Pet> characterPets = currentCharacter.getPets();
+	bool validInput = false;
+	if (!characterPets.empty()) {
+		string input;
+		bool validInput = false;
+		do {
+			MiscUtils::clearScreen();
+			cout << "[REMOVING PET]\nEnter the index of the Pet you want to remove from your collection. (or press ESC key to return)\n\n";
+			int i = 0;
+
+			cout << "\n";
+			cout << "Selection > ";
+			input = MiscUtils::safeInputNumbers(true, false);
+			if (input == MAGIC_STRING) return;
+			if (!input.empty()) {
+				int num = stoi(input);
+
+				num--;
+				if (num > -1 && num < characterPets.size()) {
+					cout << "\n";
+					SessionManager::deletePet(characterPets[num].getID());
+					validInput = true;
+				}
+			}
+		} while (!validInput);
+		MiscUtils::waitUserInput();
+	}
+	else {
+		MiscUtils::clearScreen();
+		cout << "You haven't captured any pets yet!\nUse the first option in the character menu to capture pets!\n";
+		MiscUtils::waitUserInput();
+	}
+}
+
+void Menu::petList() {
+	if (!SessionManager::isCharacterSelected()) return;
+	SessionManager::loadCharacterPets();
+	Character currentCharacter = SessionManager::getCurrentCharacter();
+	vector<Pet> characterPets = currentCharacter.getPets();
+	MiscUtils::clearScreen();
+	if (!characterPets.empty()) {
+		int i = 0;
+		cout << "[COLLECTED PETS]\n";
+		for (vector<Pet>::iterator it = characterPets.begin(); it != characterPets.end(); ++it) {
+			cout << "\n";
+			cout << i + 1 << ". " << it->getName() << "\n";
+			cout << "Type: " << it->getTypeString() << "\n";
+			cout << "Health: " << it->getCurrentHP() << "/" << it->getMaxHP() << "\n";
+			cout << "Attack Power: " << it->getAttack() << "\n";
+			i++;
+		}
+	}
+	else {
+		cout << "You haven't captured any pets yet!\nUse the first option in the character menu to capture pets!\n";
+	}
+	MiscUtils::waitUserInput();
+}
+
+void Menu::characterMenu() {
+	if (!SessionManager::isCharacterSelected()) return;
+	User currentUser = SessionManager::getCurrentUser();
+	Character currentCharacter = SessionManager::getCurrentCharacter();
+	bool returnToUserMenu = false;
+	do {
+		MiscUtils::clearScreen();
+		int input;
+		cout << "[USER: " << currentUser.getName() << ", CHARACTER: " << currentCharacter.getName() << "]\nUse the numbers on your keyboard to pick an option!\n\n";
+		cout << "1. Catch new Pet\n2. See Pet list\n3. Free a Pet\n4. Return to User Menu\n";
+
+		do {
+			cout << "\n";
+			cout << "Input > ";
+			input = MiscUtils::getKey(true);
+		} while (input < 49 || input > 52);
+
+		switch (static_cast<char>(input)) {
+		case '1':
+			petCapture();
+			break;
+		case '2':
+			petList();
+			break;
+		case '3':
+			petDelete();
+			break;
+		case '4':
+			returnToUserMenu = true;
+			break;
+		default:
+			break;
+		}
+		cout << "\n";
+	} while (!returnToUserMenu);
 }
 
 void Menu::characterSelect() {
@@ -47,6 +203,7 @@ void Menu::characterSelect() {
 			}
 		} while (!validInput);
 		MiscUtils::waitUserInput();
+		characterMenu();
 	}
 	else {
 		MiscUtils::clearScreen();

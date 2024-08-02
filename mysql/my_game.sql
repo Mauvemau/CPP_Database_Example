@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS users_characters(
 CREATE TABLE IF NOT EXISTS ptypes(
 	id_type INT AUTO_INCREMENT NOT NULL,
     type_name VARCHAR(25) NOT NULL,
-    type_description VARCHAR(45) NOT NULL,
+    type_description VARCHAR(120) NOT NULL,
     PRIMARY KEY(id_type)
 );
 

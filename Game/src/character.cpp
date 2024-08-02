@@ -16,3 +16,15 @@ int Character::getID() {
 string Character::getName() {
 	return name;
 }
+
+vector<Pet> Character::getPets() {
+	return pets;
+}
+
+void Character::setPets(vector<Pet> pets) {
+	this->pets = pets;
+}
+
+void Character::addPet(Pet pet) {
+	pets.push_back(pet);
+}

@@ -163,21 +163,21 @@
   <ItemGroup>
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\database_manager.cpp" />
-    <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\misc_utils.cpp" />
     <ClCompile Include="src\mysql_utils.cpp" />
+    <ClCompile Include="src\pet.cpp" />
     <ClCompile Include="src\session_manager.cpp" />
     <ClCompile Include="src\user.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\database_manager.h" />
-    <ClInclude Include="src\game.h" />
     <ClInclude Include="src\menu.h" />
     <ClInclude Include="src\misc_utils.h" />
     <ClInclude Include="src\mysql_utils.h" />
+    <ClInclude Include="src\pet.h" />
     <ClInclude Include="src\session_manager.h" />
     <ClInclude Include="src\user.h" />
   </ItemGroup>

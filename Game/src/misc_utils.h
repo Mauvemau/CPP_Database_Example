@@ -12,6 +12,8 @@
 #include <sys/ioctl.h>
 #endif
 
+#include "pet.h"
+
 using namespace std;
 
 static const string MAGIC_STRING = "_ABORT_INPUT";
@@ -52,10 +54,20 @@ const int LINE_VER = 186;
 class MiscUtils {
 private:
 	/// <summary>
-	/// Returns wether or not a character is allowed or not.
+	/// Returns whether or not a character is allowed or not.
 	/// </summary>
 	static bool isSafeCharacter(char input, bool allowSpecialChars);
 public:
+	static string getPetTypeString(PetType type);
+	/// <summary>
+	/// Returns the name of a random animal.
+	/// </summary>
+	/// <returns></returns>
+	static string getRandomAnimalName();
+	/// <summary>
+	/// Returns a random integer between a range.
+	/// </summary>
+	static int getRandomInt(int min, int max);
 	/// <summary>
 	/// Clears the screen
 	/// </summary>
@@ -69,19 +81,18 @@ public:
 	/// </summary>
 	static void waitUserInput();
 	/// <summary>
-	/// Similar to cout but 
+	/// Similar to cout but with more control
 	/// </summary>
 	static string SafeInput(bool allowAbort);
 	static string SafeInput(bool allowAbort, bool allowSpacing, bool allowSpecialChars, bool censorInput);
 	static string SafeInput(bool allowAbort, bool allowSpacing, bool allowSpecialChars, bool censorInput, int charLimit);
-
 	/// <summary>
-	/// 
+	/// Similar to SafeInput but only allows letters (no spaces)
 	/// </summary>
 	static string safeInputLetters(bool allowAbort, bool censorInput);
 	static string safeInputLetters(bool allowAbort, bool censorInput, int charLimit);
 	/// <summary>
-	/// 
+	/// Similar to safeInput but only allows numbers.
 	/// </summary>
 	static string safeInputNumbers(bool allowAbort, bool censorInput);
 	static string safeInputNumbers(bool allowAbort, bool censorInput, int charLimit);

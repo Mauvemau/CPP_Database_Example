@@ -7,7 +7,11 @@ class Menu {
 private:
 	bool exit;
 
-	void launchGame();
+	void petCapture();
+	void petDelete();
+	void petList();
+
+	void characterMenu();
 
 	void characterSelect();
 	void createCharacter();

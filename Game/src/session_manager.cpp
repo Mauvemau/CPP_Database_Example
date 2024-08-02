@@ -33,8 +33,16 @@ bool SessionManager::isLoggedIn() {
 	return loggedIn;
 }
 
+bool SessionManager::isCharacterSelected() {
+	return (currentCharacter.getID() > -1);
+}
+
 User SessionManager::getCurrentUser() {
 	return currentUser;
+}
+
+Character SessionManager::getCurrentCharacter() {
+	return currentCharacter;
 }
 
 bool SessionManager::verifyUser(string userName) {
@@ -101,4 +109,31 @@ void SessionManager::createCharacter(string name) {
 		cout << "Trying to create invalid character!!!\n";
 	}
 	dbm->createCharacter(currentUser.getID(), name);
+}
+
+void SessionManager::loadCharacterPets() {
+	if (!isCharacterSelected()) return;
+	vector<Pet> characterPets;
+	characterPets = dbm->getCharacterPets(currentCharacter.getID());
+	currentCharacter.setPets(characterPets);
+}
+
+void SessionManager::createPet(string name, float maxHP, float attack, PetType type) {
+	if (!isCharacterSelected()) return;
+	if (name.empty()) {
+		cout << "Trying to create invalid pet!!!\n";
+	}
+	dbm->createPet(currentCharacter.getID(), name, maxHP, attack, static_cast<int>(type));
+}
+
+void SessionManager::deletePet(int id) {
+	if (!isCharacterSelected()) return;
+	vector<Pet> characterPets = currentCharacter.getPets();
+	for (vector<Pet>::iterator it = characterPets.begin(); it != characterPets.end(); ++it) {
+		if (it->getID() == id) {
+			dbm->deletePet(id);
+			cout << "The Pet has been removed from the collection.\n";
+			return;
+		}
+	}
 }

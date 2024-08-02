@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 #ifndef _WIN32
 int _kbhit(void) {
@@ -46,6 +47,81 @@ int _getch(void) {
 	return ch;
 }
 #endif
+
+static const vector<string> animalNames = {
+	"Aardvark", "Albatross", "Alligator", "Alpaca", "Ant", "Anteater", "Antelope", "Ape", "Armadillo", "Donkey",
+	"Baboon", "Badger", "Barracuda", "Bat", "Bear", "Beaver", "Bee", "Bison", "Boar", "Buffalo",
+	"Butterfly", "Camel", "Capybara", "Caribou", "Cassowary", "Cat", "Caterpillar", "Cattle", "Chamois", "Cheetah",
+	"Chicken", "Chimpanzee", "Chinchilla", "Chough", "Clam", "Cobra", "Cockroach", "Cod", "Cormorant", "Coyote",
+	"Crab", "Crane", "Crocodile", "Crow", "Curlew", "Deer", "Dinosaur", "Dog", "Dogfish", "Dolphin",
+	"Dotterel", "Dove", "Dragonfly", "Duck", "Dugong", "Dunlin", "Eagle", "Echidna", "Eel", "Eland",
+	"Elephant", "Elk", "Emu", "Falcon", "Ferret", "Finch", "Fish", "Flamingo", "Fly", "Fox",
+	"Frog", "Gaur", "Gazelle", "Gerbil", "Giraffe", "Gnat", "Gnu", "Goat", "Goldfinch", "Goldfish",
+	"Goose", "Gorilla", "Goshawk", "Grasshopper", "Grouse", "Guanaco", "Gull", "Hamster", "Hare", "Hawk",
+	"Hedgehog", "Heron", "Herring", "Hippo", "Hornet", "Horse", "Hummingbird", "Hyena", "Ibex",
+	"Ibis", "Jackal", "Jaguar", "Jay", "Jellyfish", "Kangaroo", "Kingfisher", "Koala", "Kookaburra", "Kouprey",
+	"Kudu", "Lapwing", "Lark", "Lemur", "Leopard", "Lion", "Llama", "Lobster", "Locust", "Loris",
+	"Louse", "Lyrebird", "Magpie", "Mallard", "Manatee", "Mandrill", "Mantis", "Marten", "Meerkat", "Mink",
+	"Mole", "Mongoose", "Monkey", "Moose", "Mosquito", "Mouse", "Mule", "Narwhal", "Newt", "Nightingale",
+	"Octopus", "Okapi", "Opossum", "Oryx", "Ostrich", "Otter", "Owl", "Oyster", "Panther", "Parrot",
+	"Partridge", "Peafowl", "Pelican", "Penguin", "Pheasant", "Pig", "Pigeon", "Pony", "Porcupine", "Porpoise",
+	"Quail", "Quelea", "Quetzal", "Rabbit", "Raccoon", "Rail", "Ram", "Rat", "Raven", "Red deer",
+	"Red panda", "Reindeer", "Rhino", "Rook", "Salamander", "Salmon", "Sand Dollar", "Sandpiper", "Sardine", "Scorpion",
+	"Seahorse", "Seal", "Shark", "Sheep", "Shrew", "Skunk", "Snail", "Snake", "Sparrow", "Spider",
+	"Spoonbill", "Squid", "Squirrel", "Starling", "Stingray", "Stork", "Swallow", "Swan", "Tapir",
+	"Tarsier", "Termite", "Tiger", "Toad", "Trout", "Turkey", "Turtle", "Viper", "Vulture", "Wallaby",
+	"Walrus", "Wasp", "Weasel", "Whale", "Wildcat", "Wolf", "Wolverine", "Wombat", "Woodcock", "Woodpecker",
+	"Worm", "Wren", "Yak", "Zebra", "Antlion", "Aphid", "Armyworm", "Assassin Bug", "Backswimmer", "Bedbug", "Beetle", "Blister Beetle", "Booklouse", 
+	"Boxelder Bug", "Bumblebee", "Caddisfly", "Carpenter Ant", "Carpenter Bee", "Carpet Beetle", "Caterpillar", "Cicada", 
+	"Click Beetle", "Clothes Moth", "Cockchafer", "Crane Fly", "Cricket", "Damselfly", "Darkling Beetle", "Dobsonfly", "Dragonfly", 
+	"Dung Beetle", "Earwig", "Flea", "Firefly", "Frit Fly", "Fruit Fly", "Fungus Gnat", "Giant Water Bug", "Glowworm", "Leafhopper", "Green Lacewing",
+	"Ground Beetle", "Gypsy Moth", "Harlequin Bug", "Harvestman", "Head Louse", "Hoverfly", "House Cricket", "Housefly", "Ichneumon Wasp", "Japanese Beetle", 
+	"June Bug", "Katydid", "Kissing Bug", "Lace Bug", "Ladybird Beetle", "Leaf Beetle", "Leafhopper", "Longhorn Beetle", "Lovebug", "Mayfly", "Mealybug", 
+	"Mole Cricket", "Moth", "Mud Dauber", "Net-winged Beetle", "Oakworm", "Paper Wasp", "Pea Aphid", "Pill Bug", "Praying Mantis", "Puss Moth", "Reduviid Bug", 
+	"Rove Beetle", "Sawfly", "Scarab Beetle", "Scorpionfly", "Seed Beetle", "Shield Bug", "Silverfish", "Soldier Beetle", "Green Stink Bug", "Spider Wasp",
+	"Spittlebug", "Stag Beetle", "Stink Bug", "Stonefly", "Striped Beetle", "Ground Cricket", "Walkingstick", "Termite", "Caterpillar", "Tachinid Fly", 
+	"Tarsonemid Mite", "Thrips", "Tiger Beetle", "Treehopper", "Tsetse Fly", "Vinegar Fly", "Walkingstick", "Water Strider", "Weevil", "Whirligig Beetle", 
+	"Whitefly", "Yellowjacket", "Zebra Swallowtail", "Zorapteran", "Zygoptera", "Army Ant", "Argentine Ant", "Asian Lady Beetle", "Australian Cockroach", 
+	"Bark Beetle", "Bat Bug", "Bean Leaf Beetle", "Bird Louse", "Black Vine Weevil", "Blue Bottle Fly", "Brazilian Cockroach", "Broad-headed Bug", 
+	"Brown-banded Cockroach", "Bulb Mite", "Carrot Rust Fly", "Cherry Fruit Fly", "Chinch Bug", "Cicada Killer", "Clover Mite", "Coconut Crab", 
+	"Furniture Beetle", "Corn Earworm", "Cucumber Beetle", "Cutworm", "Deathwatch Beetle", "Dermestid Beetle", "Corn Borer", "Eyed Click Beetle", 
+	"Flat-headed Borer", "Tent Caterpillar", "Plant Bug", "Fungus Beetle", "Gall Wasp", "Garden Spider", "Tortoise Beetle", "Grape Berry Moth"
+};
+
+string MiscUtils::getPetTypeString(PetType type) {
+	string str = "";
+	switch (type)
+	{
+	case PetType::FIRE:
+		str = "FIRE";
+		break;
+	case PetType::WATER:
+		str = "WATER";
+		break;
+	case PetType::GRASS:
+		str = "GRASS";
+		break;
+	default:
+		break;
+	}
+	return str;
+}
+
+string MiscUtils::getRandomAnimalName() {
+	int index = getRandomInt(0, animalNames.size() - 1);
+	return animalNames[index];
+}
+
+int MiscUtils::getRandomInt(int min, int max) {
+	srand(static_cast<unsigned>(time(0)));
+	if (min > max) {
+		int aux = max;
+		max = min;
+		min = aux;
+	}
+
+	return (rand() % (abs(max - min) + 1) + min);
+}
 
 bool MiscUtils::isSafeCharacter(char input, bool allowSpecialChars) {
 	if (isalnum(input)) {
