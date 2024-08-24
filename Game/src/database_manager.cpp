@@ -236,8 +236,8 @@ void DatabaseManager::createCharacter(int userID, string characterName) {
 vector<Pet> DatabaseManager::getCharacterPets(int characterID) {
 	vector<Pet> pets;
 	string query = "SELECT p.id_pet, p.pet_name, p.pet_max_hp, p.pet_current_hp, p.pet_attack_damage, p.id_type "
-		"FROM pets p INNER JOIN characters_pets cp ON p.id_pet = cp.id_pet "
-		"WHERE cp.id_character = " + to_string(characterID);
+				   "FROM pets p INNER JOIN characters_pets cp ON p.id_pet = cp.id_pet "
+				   "WHERE cp.id_character = " + to_string(characterID);
 
 	try {
 		MYSQL_RES* result = MySQLUtils::executeQuery(mysql, query.c_str());
